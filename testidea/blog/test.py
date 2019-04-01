@@ -38,3 +38,17 @@ class TestCategory(TestCase):
         # pp(connection.queries)
         # print('*'*50)
         # print(len(cate))
+
+
+    def test_value(self):
+        print('3333333333333333333333333333333333333333'*3)
+        category = Category.objects.values('name')
+        print(category)
+        print('4'*45)
+        category = Category.objects.values_list('name')
+        print(category)
+        print('5'*55)
+        category = Category.objects.values_list('name',flat=True)
+        print(category)
+        for cate in category:
+            print(cate)
