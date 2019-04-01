@@ -10,7 +10,7 @@ class Category(models.Model):
         (2,'删除'),
     )
 
-    name = models.CharField(max_length=50,verbose_name='名称')
+    name = models.CharField(max_length=50,verbose_name='名称')   #
     status = models.PositiveIntegerField(default=1,choices=STATUS_ITEMS,verbose_name='状态')
     is_nav = models.BooleanField(default=True,verbose_name='是否为导航')
     owner = models.ForeignKey(User,verbose_name='作者')
@@ -53,3 +53,5 @@ class Post(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = '文章'
+
+

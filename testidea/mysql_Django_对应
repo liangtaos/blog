@@ -1,0 +1,43 @@
+CharField   ===>   varchar
+Foreigkey   ===>    外键约束
+ManyToMany  ===>
+
+
+queryset:  对数据的分层，解耦，隔离。   懒加载的对象，链式调用(是re否返回queryset)
+
+all
+filter
+exclude()   反向的
+reverse（）  逆序的
+distinct()  去掉重复的数据
+none()      返回空的queryset
+
+
+不支持链式调用
+
+get
+create
+get_or_create  若有拿，没有创建
+update_or_create
+count()      数量
+latest    最近的数据一条
+earliest   最早的一条数据
+first
+last
+exists
+bulk_create
+in_bulk
+update
+delete
+
+
+
+进阶
+
+defer()   懒加载   Post.objects.all().defer('content')
+only(title)   只查询title  select  title  from blog；
+select_related()   处理外键
+
+
+
+
