@@ -32,13 +32,19 @@ class SideBar(models.Model):
         (4, '最近评论'),
     )
     title = models.CharField(max_length=50, verbose_name="标题")
-    display_type = models.PositiveIntegerField(default=1, choices=SIDE_TYPE,
-                                               verbose_name="展示类型")
+    # display_type = models.PositiveIntegerField(default=1, choices=SIDE_TYPE,verbose_name="展示类型")
+    display_type = models.IntegerField(default=1, choices=SIDE_TYPE,verbose_name="展示类型")
+                                               # verbose_name="展示类型")
     content = models.CharField(max_length=500, blank=True, verbose_name="内容",
                                help_text="如果设置的不是HTML类型，可为空")
 
     owner = models.ForeignKey(User, verbose_name="作者")
     created_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+
+    # @property
+    def status_type(self):
+        return '类型: %s'% (dict(self.SIDE_TYPE)[self.display_type])
+    status_type.short_description = '状态'
 
     class Meta:
         verbose_name = verbose_name_plural = "侧边栏"
