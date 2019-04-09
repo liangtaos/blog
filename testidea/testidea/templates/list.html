@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<h1>LIST</h1>
+<ul>
+{% for post in posts %}
+    <li>title:{{ post.title }}<br />
+        desc: {{ post.desc }}<br />
+        tag: {{ post.tag.name }}<br />
+        category: {{  post.category }}
+    </li>
+
+    <hr />
+{% endfor %}
+    <!--是否有上一页 -->
+    {% if posts.has_previous %}
+        <a href="/?page={{ posts.previous_page_number }}">上一页</a>
+    {% endif %}
+
+
+    <!--是否有下一页-->
+    {% if posts.has_next %}
+        <a href="/?page={{ posts.next_page_number }}">下一页</a>
+    {% endif %}
+
+
+</ul>
+
+</ul>
+</body>
+</html>
