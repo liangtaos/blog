@@ -1,34 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<h1>LIST</h1>
-<ul>
-{% for post in posts %}
-    <li>title:{{ post.title }}<br />
-        desc: {{ post.desc }}<br />
-        tag: {{ post.tag.name }}<br />
-        category: {{  post.category }}
+
+{% extends "./base.html" %}
+
+
+{% block content %}
+
+    <ul>
+    {% for post in posts %}
+        <li>title:<a href="{% url "post" post.id %}">{{ post.title }}</a><br />
+            desc: {{ post.desc }}<br />
+            tag: {{ post.tag.name }}<br />
+            category: <a href="{% url "category" post.category_id %}">{{  post.category }}</a>
     </li>
-
     <hr />
-{% endfor %}
-    <!--是否有上一页 -->
-    {% if posts.has_previous %}
-        <a href="/?page={{ posts.previous_page_number }}">上一页</a>
-    {% endif %}
+    {% endfor %}
 
+    <!--是否有上一页 -->
+    {% if page_obj.has_previous %}
+        {% if category_id %}
+            <a href="/category/{{ category_id }}?page={{ page_obj.previous_page_number }}">上一页</a>
+        {% elif tag_id %}
+            <a href="/tag/{{ tag_id }}?page={{ page_obj.previous_page_number }}">上一页</a>
+        {% else %}
+            <a href="/?page={{ page_obj.previous_page_number }}">上一页</a>
+        {% endif %}
+    {% endif %}
+    Page {{ page_obj.number }} to {{ paginator.num_pages }}
 
     <!--是否有下一页-->
-    {% if posts.has_next %}
-        <a href="/?page={{ posts.next_page_number }}">下一页</a>
+    {% if page_obj.has_next %}
+        {% if category_id %}
+            <a href="/category/{{ category_id }}?page={{ page_obj.next_page_number }}">下一页</a>
+        {% elif tag_id %}
+            <a href="/tag/{{ tag_id }}?page={{ page_obj.next_page_number }}">下一页</a>
+        {% else %}
+            <a href="/?page={{ page_obj.next_page_number }}">下一页</a>
+        {% endif %}
     {% endif %}
 
-
+    </ul>
 </ul>
 
-</ul>
+<hr />
+
+{% endblock %}
+
 </body>
 </html>

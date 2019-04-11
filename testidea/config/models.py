@@ -46,5 +46,8 @@ class SideBar(models.Model):
         return '类型: %s'% (dict(self.SIDE_TYPE)[self.display_type])
     status_type.short_description = '状态'
 
+    def __str__(self):
+        return self.title
+
     class Meta:
         verbose_name = verbose_name_plural = "侧边栏"

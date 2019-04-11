@@ -3,48 +3,70 @@ from django.http import HttpResponse
 
 # Create your views here.
 
-from .models import Post,Tag
+from .models import Post,Tag, Category
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from config.models import Link, SideBar
+from comment.models import Comment
 
-def index(request, category_id=None, tag_id=None):
-    queryset = Post.objects.all()
-    page_size = 3
-    if category_id:
-        queryset = queryset.filter(category_id=category_id)
-    elif tag_id:
+from django.views.generic import ListView  # 对多个对象展示的应用，列表展示
+from django.views.generic import DetailView # 对单个对象展示的应用
+
+
+class CommonMixin(object):
+    def get_context_date(self):
+        cates = Category.objects.all()
+        showCate = []
+        hiddenCate = []
+        for cate in cates:
+            if cate.is_nav:
+                showCate.append(cate)
+            else:
+                hiddenCate.append(cate)
+        hotPosts = Post.objects.all()[:10]
+        sidebar = SideBar.objects.all().order_by('display_type')
+        comment = Comment.objects.all().order_by('created_time')[:5]
+        extra_context = {
+            'showCate': showCate,
+            'hiddenCate': hiddenCate,
+            'hotPosts': hotPosts,
+            'sidebar': sidebar,
+            'comment': comment,
+        }
+        return super(CommonMixin, self).get_context_date(**extra_context)
+
+class BasePostView(ListView,CommonMixin):
+    model = Post
+    template_name = 'list.html'
+    context_object_name = 'posts'
+    paginate_by = 4
+
+
+
+class IndexView(BasePostView):
+    # def get(self, request, *args, **kwargs):
+    pass
+
+    # def get_queryset(self):
+
+
+class CategoryView(BasePostView):
+    def get_queryset(self):
+        qs = super(CategoryView,self).get_queryset()
+        cate_id = self.kwargs.get('category_id')
+        qs = qs.filter(category_id=cate_id)
+        return qs
+
+class TagView(BasePostView):
+    def get_queryset(self):
+        tag_id = self.kwargs.get('tag_id')
         try:
             tag = Tag.objects.get(id=tag_id)
-        except Exception as e:
-            return HttpResponse(404)
-        queryset = tag.tags.all()
-    if not queryset:
-        return HttpResponse(404)
+        except Tag.DoesNotExist:
+            return []
+        posts = tag.tags.all()
+        return posts
 
-    paginator = Paginator(queryset, page_size)
-    page = request.GET.get('page', 1)
-    currentPage = int(page)
-    try:
-        queryset = paginator.page(currentPage)
-    except PageNotAnInteger:
-        queryset = paginator.page(1)
-    except EmptyPage:
-        queryset = paginator.page(paginator.num_pages)
-    context = {
-        'posts': queryset,
-        'page': currentPage
-    }
-
-    return render(request, 'list.html', context=context,)
-
-
-
-def detail(request, post_id):
-    try:
-        post = Post.objects.get(id=post_id)
-    except Exception as DoesNotExist:
-        return HttpResponse(404)
-    context = {
-        'post': post
-    }
-
-    return render(request, 'detail.html', context=context)
+class PostView(CommonMixin,DetailView):
+    model = Post
+    template_name = 'detail.html'
+    context_object_name = 'post'

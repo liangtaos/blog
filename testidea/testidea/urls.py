@@ -15,14 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from blog.views import index, detail
 from .custom_site import custom_site
+from blog.views import IndexView, CategoryView, TagView, PostView
+
+
 
 urlpatterns = [
-    url(r'^$',index),
+    url(r'^$',IndexView.as_view(), name='index'),
     url(r'^super_admin/', admin.site.urls),
     url(r'^cus_admin/', custom_site.urls),
-    url(r'^post/(?P<post_id>\d+).html',detail),
-    url(r'^category/(?P<category_id>\d+)/',index),
-    url(r'^tag/(?P<tag_id>\d+)/',index),
+    url(r'^post/(?P<pk>\d+).html',PostView.as_view(), name='post'),
+    url(r'^category/(?P<category_id>\d+)/', CategoryView.as_view(), name='category'),
+    url(r'^tag/(?P<tag_id>\d+)/',TagView.as_view(), name='tag'),
 ]
