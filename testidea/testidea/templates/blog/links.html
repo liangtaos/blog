@@ -1,0 +1,16 @@
+{% extends "./base.html" %}
+
+
+{% block content %}
+    <h1><center>Welcome Links by cold</center></h1>
+    <br />
+    <br />
+    {% for link in links %}
+        title:{{ link.title }}<br />
+        image: <img height="25" src="{{ link.href }}/favicon.ico"/><br />
+        href: <a href={{ link.href }}>{{ link.href }}</a>
+        <hr />
+    {% endfor %}
+
+
+{% endblock %}

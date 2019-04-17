@@ -73,7 +73,7 @@ def index(request, category_id=None, tag_id=None):
         'tag_id': tag_id,
     }
     context.update(getBaseData())
-    return render(request, 'list.html', context=context,)
+    return render(request, 'blog/list.html', context=context, )
 
 
 
@@ -86,4 +86,4 @@ def detail(request, post_id):
         'post': post
     }
     context.update(getBaseData())
-    return render(request, 'detail.html', context=context)
+    return render(request, 'blog/detail.html', context=context)

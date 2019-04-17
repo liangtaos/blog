@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Post,Category,Tag
+from .models import Post,Category,Tag, TopNav
 from django.utils.html import format_html
 from testidea.custom_site import custom_site
 from testidea.BaseAdmin import BaseOwnerAdmin
@@ -44,6 +44,11 @@ class CategoryAdmin(BaseOwnerAdmin):
 @admin.register(Tag, site=custom_site)
 class TagAdmin(BaseOwnerAdmin):
     list_display = ['name', 'status', 'owner', 'created_time']
+
+
+@admin.register(TopNav, site=custom_site)
+class TopNavAdmin(BaseOwnerAdmin):
+    list_display = ['name', 'url', 'owner', 'status', 'created_time']
 
 # admin.site.register(Post,PostAdmin,site=custom_site)
 # admin.site.register(Category,CategoryAdmin)

@@ -11,7 +11,7 @@ from django.urls import reverse
 
 @admin.register(Comment,site=custom_site)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['nickname', 'operator','post', 'email', 'created_time', ]
+    list_display = ['nickname', 'operator','target', 'email', 'created_time', ]
     # list_display_links = ('website',)
 
 

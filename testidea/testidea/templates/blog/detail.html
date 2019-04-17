@@ -1,0 +1,25 @@
+{% extends "./base.html" %}
+
+{% block content %}
+    {% if post %}
+    <h2>{{ post.title }}</h2>
+        <hr />
+    <div style="margin-bottom: 50px">
+
+        <span>分类:{{ post.category.name }}</span> |
+        <span>作者:{{ post.owner.username }}</span> |
+        <span>标签:{% for tag in post.tag.all %}
+                        {{ tag.name }}
+                  {% endfor %}
+        </span> |
+        <span>发布时间:{{ post.created_time }}</span>
+
+    </div>
+
+    <p>
+        {{ post.content }}
+    </p>
+    {% endif %}
+    <hr />
+    {% include 'comment/block.html' %}
+{% endblock %}

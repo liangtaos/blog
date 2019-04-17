@@ -1,0 +1,67 @@
+
+{% extends "./base.html" %}
+
+
+{% block content %}
+    <ul>
+    <ul class="list-group list-group-flush">
+    {% if posts %}
+    {% for post in posts %}
+
+        <li class="list-group-item">
+            <a href="{% url 'post' post.id %}">{{ post.title }}</a>
+            <div>
+                <span>作者:<a href="{% url 'author' post.owner_id %}">{{ post.owner.username }}</a></span> |
+                <span>分类:<a href="{% url 'category' post.category_id %}">{{ post.category.name }}</a></span> |
+                <span>标签:
+                    {% for tag in post.tag.all %}
+                        <a href="{% url 'tag' tag.id %}">{{ tag.name }}</a>
+                    {% endfor %}
+                </span> |
+                <span>时间: {{ post.created_time }}</span>
+            </div>
+        </li>
+
+    {% endfor %}
+        </ul>
+    <br />
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+
+        <li class="page-item">
+            {% if query %}
+           <a class="page-link" href="{{ url }}?page={{ page_obj.previous_page_number }}&query={{ query }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+            {% else %}
+           <a class="page-link" href="{{ url }}?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+           {% endif %}
+        </li>
+        {% endif %}
+            <li class="page-item"><a class="page-link" href="{{ url }}?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+            {% if page_obj.has_next %}
+          <li class="page-item">
+                {% if query %}
+                <a class="page-link" href="{{ url }}?page={{ page_obj.next_page_number }}&query={{ query }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                </a>
+                 {% else %}
+                  <a class="page-link" href="{{ url }}?page={{ page_obj.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                </a>
+                   {% endif %}
+          {% endif %}
+        </li>
+      </ul>
+    </nav>
+    {% else %}
+        Empty
+    {% endif %}
+    </ul>
+</ul>
+
+
+{% endblock %}

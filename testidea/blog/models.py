@@ -69,5 +69,24 @@ class Post(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = '文章'
+        ordering = ['id']
 
 
+class TopNav(models.Model):
+    STATUS = (
+        (1, '正常'),
+        (2, '删除'),
+    )
+
+    name = models.CharField(max_length=50, verbose_name='名字')
+    url = models.URLField(verbose_name='链接')
+    owner = models.ForeignKey(User, verbose_name='作者')
+    status = models.IntegerField(default=1,choices=STATUS,verbose_name='状态')
+    created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    update_time = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = verbose_name_plural = '顶部导航'

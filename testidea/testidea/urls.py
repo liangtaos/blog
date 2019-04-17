@@ -16,8 +16,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from .custom_site import custom_site
-from blog.views import IndexView, CategoryView, TagView, PostView
-
+from blog.views import IndexView, CategoryView, TagView, PostView,AuthorView, LinkView
+from comment.views import CommentView
 
 
 urlpatterns = [
@@ -27,4 +27,7 @@ urlpatterns = [
     url(r'^post/(?P<pk>\d+).html',PostView.as_view(), name='post'),
     url(r'^category/(?P<category_id>\d+)/', CategoryView.as_view(), name='category'),
     url(r'^tag/(?P<tag_id>\d+)/',TagView.as_view(), name='tag'),
+    url(r'^author/(?P<author_id>\d+)/',AuthorView.as_view(), name='author'),
+    url(r'^links/$',LinkView.as_view(), name='author'),
+    url(r'^comment/$', CommentView.as_view(), name='comment'),
 ]
