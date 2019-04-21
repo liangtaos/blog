@@ -17,7 +17,9 @@
     </div>
 
     <p>
-        {{ post.content }}
+        {% autoescape off %}
+        {{ post.html }}
+        {% endautoescape %}
     </p>
     {% endif %}
     <hr />

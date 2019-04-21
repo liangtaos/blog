@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
-
-
+import markdown
 
 class Category(models.Model):
     STATUS_ITEMS = (
@@ -52,16 +51,24 @@ class Post(models.Model):
     category = models.ForeignKey(Category, verbose_name='分类')
     tag = models.ManyToManyField(Tag,verbose_name='标签',related_name='tags')
     content = models.TextField(verbose_name='内容', help_text="注:目前仅支持Markdown格式")
+    is_markdown = models.BooleanField(default=True, verbose_name='支持Markdown格式')
+    html = models.TextField(default='', verbose_name='渲染后的内容')
     status = models.IntegerField(default=1,choices=STATUS,verbose_name='状态')
     owner = models.ForeignKey(User,verbose_name='作者')
     created_time = models.DateTimeField(auto_now_add=True,verbose_name='发布时间')##增加文章则自动添加时间
     update_time = models.DateTimeField(auto_now=True, verbose_name='更新时间')  # 修改自动添加时间
 
-    # @property
     def status_show(self):
         return '当前状态: %s'% (dict(self.STATUS)[self.status])
 
     status_show.short_description = '展示状态'
+
+    def save(self, *args, **kwargs):
+        if self.is_markdown:
+
+            self.html = markdown.markdown(self.content, extensions=["codehilite"])
+
+        return super(Post, self).save(*args, **kwargs)
 
 
     def __str__(self):
@@ -69,7 +76,7 @@ class Post(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = '文章'
-        ordering = ['id']
+        ordering = ['-created_time', '-id']
 
 
 class TopNav(models.Model):

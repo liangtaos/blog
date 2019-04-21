@@ -15,7 +15,7 @@ class PostAdmin(BaseOwnerAdmin):
     # form = PostAdminForm    # 通过adminform处理
     list_display = ['title', 'category', 'owner','status_show', 'created_time', 'operator', 'de', 'status']   # 展示
     search_fields = ['title', 'category__name', 'owner__username']   # 搜索
-    exclude = ['owner']
+    exclude = ['owner', 'html']
     list_filter = ['status']
 
     def operator(self,obj):
@@ -33,7 +33,7 @@ class PostAdmin(BaseOwnerAdmin):
     de.short_description = '删除'
 
     def save_model(self, request, obj, form, change):
-        print(self,request,obj,form, change)
+        # print(self,request,obj,form, change)
         obj.owner = request.user
         return super(PostAdmin, self).save_model(request,obj,form, change)
 

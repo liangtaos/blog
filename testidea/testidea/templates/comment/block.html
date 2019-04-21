@@ -5,4 +5,17 @@
             {{ comment_form }}
             <input  type="submit" value="提交" />
         </form>
+    <!-- 评论页面 -->
+    <ul class="list-group">
+        {% for comment in comments %}
+            <li class="list-group-item">
+                <a href="{{ comment.webite }}">{{ comment.nickname }}</a>
+                <span>{{ comment.created_time }}</span><br/>
+                {{ comment.content }}
+            </li>
+        {% endfor %}
+
+
+    </ul>
+
 </div>

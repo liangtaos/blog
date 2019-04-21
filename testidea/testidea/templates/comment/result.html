@@ -5,6 +5,12 @@
 
 {% if succeed %}
     发布成功
+    <a href="{{ target }}">返回</a>
 {% else %}
-    {{ form }}
+    <ul class="errorlist">
+        {% for field, message in form.errors.items %}
+            <li>{{ mssage }}</li>
+        {% endfor %}
+    </ul>
+    <a href="javascript:windos.history.back();">返回</a>
 {% endif %}

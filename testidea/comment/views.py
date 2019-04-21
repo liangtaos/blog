@@ -10,6 +10,7 @@ from .forms import CommentForm
 
 
 class CommentView(TemplateView):
+    http_method_names = ['POST']
     template_name = 'comment/result.html'
 
 
@@ -31,5 +32,6 @@ class CommentView(TemplateView):
         context = {
             'succeed': succeed,
             'form': comment_form,
+            'target': target,
         }
         return self.render_to_response(context)

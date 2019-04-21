@@ -87,10 +87,22 @@ class LinkView(BasePostView, ListView):
     template_name = 'blog/links.html'
     context_object_name = 'links'
 
+    def getcomments(self):
+        target = self.request.path
+        comments = Comment.objects.filter(target=target)
+        return comments
+
     def get_queryset(self):
         qs = Link.objects.filter(status=1).order_by('-weight')
         return qs
 
+    def get_context_data(self, **kwargs):
+        comments = self.getcomments()
+        kwargs.update(
+            {'comment_form': CommentForm(),
+             'comments': comments,}
+        )
+        return super(LinkView, self).get_context_data(**kwargs)
 
 class TagView(BasePostView):
 
@@ -115,8 +127,15 @@ class PostView(CommonMixin,DetailView):
     template_name = 'blog/detail.html'
     context_object_name = 'post'
 
+    def getcomments(self):
+        target = self.request.path
+        comments = Comment.objects.filter(target=target)
+        return comments
+
     def get_context_data(self, **kwargs):
+        comments = self.getcomments()
         kwargs.update({
             'comment_form': CommentForm(),
+            'comments': comments,
         })
         return super(PostView, self).get_context_data(**kwargs)
