@@ -65,8 +65,15 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         if self.is_markdown:
-
-            self.html = markdown.markdown(self.content, extensions=["codehilite"])
+            config = {
+                'codehilite': {
+                    'use_pygments': False,
+                    'css_class': 'prettyprint linenums',
+                }
+            }
+            self.html = markdown.markdown(self.content, extensions=["codehilite"], extension_configs=config)
+        else:
+            self.html = self.content
 
         return super(Post, self).save(*args, **kwargs)
 

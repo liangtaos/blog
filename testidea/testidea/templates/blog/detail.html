@@ -1,5 +1,9 @@
 {% extends "./base.html" %}
 
+{% block style %}
+        <!--link href="https://cdn.rawgit.com/google/code-prettify/master/loader/skins/desert.css" rel="stylesheet"-->
+    <link rel="stylesheet" href="http://pygments.org/_static/pygments.css">
+{% endblock %}
 {% block content %}
     {% if post %}
     <h2>{{ post.title }}</h2>
@@ -24,4 +28,7 @@
     {% endif %}
     <hr />
     {% include 'comment/block.html' %}
+{% endblock %}
+
+{% block javascript %}
 {% endblock %}

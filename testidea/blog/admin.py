@@ -15,7 +15,7 @@ class PostAdmin(BaseOwnerAdmin):
     # form = PostAdminForm    # 通过adminform处理
     list_display = ['title', 'category', 'owner','status_show', 'created_time', 'operator', 'de', 'status']   # 展示
     search_fields = ['title', 'category__name', 'owner__username']   # 搜索
-    exclude = ['owner', 'html']
+    exclude = ['owner', ]
     list_filter = ['status']
 
     def operator(self,obj):
