@@ -2,18 +2,15 @@ from django.contrib import admin
 # Register your models here.
 from django.http import HttpResponse
 from .models import Comment
-from testidea.custom_site import custom_site
 
-from django.utils.html import format_html
-from django.urls import reverse
+import xadmin
 
 
-
-@admin.register(Comment,site=custom_site)
-class CommentAdmin(admin.ModelAdmin):
+# @admin.register(Comment,site=custom_site)
+class CommentAdmin(object):
     list_display = ['nickname', 'operator','target', 'email', 'created_time', ]
     # list_display_links = ('website',)
 
 
 
-# admin.site.register(Comment, CommentAdmin)
+xadmin.site.register(Comment, CommentAdmin)
