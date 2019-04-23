@@ -9,11 +9,40 @@ from comment.models import Comment
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
 from django.views.generic import DetailView
-from django.db.models import Q
+# from django.db.models import Q
 from comment.forms import CommentForm
+from django.db.models import F, Q
+from django.core.cache import cache
+
 
 
 class CommonMixin(object):
+
+
+
+    def get_real_ip(self):
+        if self.request.META.get('HTTP_X_FORWARDED_FOR'):
+            ip = self.request.META['HTTP_X_FORWARDED_FOR']
+        else:
+            ip = self.request.META['REMOTE_ADDR']
+        return ip
+
+    def getOnlineum(self):
+        http_user_agent = self.request.META.get('HTTP_USER_AGENT', [])
+        if 'Spider' in http_user_agent or 'spider' in http_user_agent:
+            return 404
+        online_ips = cache.get('online_ips', [])
+        if online_ips:
+            online_ips = cache.get_many(online_ips)
+            online_ips = list(online_ips.keys())
+        ip = self.get_real_ip()
+        cache.set(ip, 1, 5*60)
+        if ip not in online_ips:
+            online_ips.append(ip)
+        cache.set('online_ips', online_ips, 5 * 60)
+        return len(online_ips)
+
+
     def get_context_data(self, **kwargs):
         cates = Category.objects.all()
         showCate = []
@@ -29,7 +58,9 @@ class CommonMixin(object):
         comment = Comment.objects.all().order_by('created_time')[:5]
         nav = TopNav.objects.filter(status=1)
         url_ = self.request.path
+        onlinenum = self.getOnlineum()
         extra_context = {
+            'onlinenum': onlinenum,
             'url': url_,
             'navs': nav,
             'showCate': showCate,
@@ -126,6 +157,34 @@ class PostView(CommonMixin,DetailView):
     model = Post
     template_name = 'blog/detail.html'
     context_object_name = 'post'
+
+    def get(self, request, *args, **kwargs):
+        response = super(PostView, self).get(request, *args, **kwargs)
+
+        # 处理pv, uv的逻辑
+        sessionid = self.request.COOKIES.get('sessionid')
+        if not sessionid:
+            return response
+        pv_key = '{0}@{1}'.format(sessionid, self.request.path)
+        uv_key = '{0}:{1}'.format(sessionid, self.request.path)
+        if not cache.get(pv_key):
+            self.increase_pv()
+            cache.set(pv_key, 2, 30)
+
+
+        if not cache.get(uv_key):
+            self.increase_uv()
+            cache.set(uv_key, 1, 60 * 60 * 24)
+
+        return response
+
+    def increase_pv(self):
+        Post.objects.filter(pk=self.object.id).update(pv=F('pv') + 1)
+
+    def increase_uv(self):
+        Post.objects.filter(pk=self.object.id).update(uv=F('uv') + 1)
+
+
 
     def getcomments(self):
         target = self.request.path

@@ -54,9 +54,13 @@ class Post(models.Model):
     is_markdown = models.BooleanField(default=True, verbose_name='支持Markdown格式')
     html = models.TextField(default='', verbose_name='渲染后的内容')
     status = models.IntegerField(default=1,choices=STATUS,verbose_name='状态')
+    pv = models.IntegerField(default=0, verbose_name='阅读量')
+    uv = models.IntegerField(default=0, verbose_name='日用户量')
     owner = models.ForeignKey(User,verbose_name='作者')
     created_time = models.DateTimeField(auto_now_add=True,verbose_name='发布时间')##增加文章则自动添加时间
     update_time = models.DateTimeField(auto_now=True, verbose_name='更新时间')  # 修改自动添加时间
+
+
 
     def status_show(self):
         return '当前状态: %s'% (dict(self.STATUS)[self.status])

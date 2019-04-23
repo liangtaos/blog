@@ -2,7 +2,7 @@
 
 {% block style %}
         <!--link href="https://cdn.rawgit.com/google/code-prettify/master/loader/skins/desert.css" rel="stylesheet"-->
-    <link rel="stylesheet" href="http://pygments.org/_static/pygments.css">
+    <link rel="stylesheet" href="/static/css/pygments.css">
 {% endblock %}
 {% block content %}
     {% if post %}
@@ -16,7 +16,8 @@
                         {{ tag.name }}
                   {% endfor %}
         </span> |
-        <span>发布时间:{{ post.created_time }}</span>
+        <span>发布时间:{{ post.created_time }}</span> |
+        <span>阅读量:{{ post.pv }} - {{ post.uv }}</span>
 
     </div>
 

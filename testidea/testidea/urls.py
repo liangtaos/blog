@@ -22,7 +22,7 @@ from comment.views import CommentView
 
 urlpatterns = [
     url(r'^$',IndexView.as_view(), name='index'),
-    url(r'^super_admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
     url(r'^cus_admin/', custom_site.urls),
     url(r'^post/(?P<pk>\d+).html',PostView.as_view(), name='post'),
     url(r'^category/(?P<category_id>\d+)/', CategoryView.as_view(), name='category'),
