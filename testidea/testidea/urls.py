@@ -15,14 +15,24 @@ Including another URLconf
 """
 import xadmin
 xadmin.autodiscover()
-from django.conf.urls import url
+from django.conf.urls import url, include
 from blog.views import IndexView, CategoryView, TagView, PostView,AuthorView, LinkView
 from comment.views import CommentView
 from testidea import adminx
-
+from blog.api import PostViewSet, CategoryViewSet, TagViewSet, UserViewSet
 from ckeditor_uploader import urls as uploader_urls
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework import routers
+from rest_framework.documentation import include_docs_urls
+
+
+router = routers.DefaultRouter()
+router.register(r'tags', TagViewSet)
+router.register(r'posts', PostViewSet)
+router.register(r'categories', CategoryViewSet)
+
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
     url(r'^$',IndexView.as_view(), name='index'),
@@ -33,5 +43,7 @@ urlpatterns = [
     url(r'^author/(?P<author_id>\d+)/',AuthorView.as_view(), name='author'),
     url(r'^links/$',LinkView.as_view(), name='author'),
     url(r'^comment/$', CommentView.as_view(), name='comment'),
+    url(r'^api/', include(router.urls)),
+    url(r'^api/docs/', include_docs_urls(title='My API Title'))
 
 ] + uploader_urls.urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

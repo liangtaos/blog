@@ -49,7 +49,7 @@ class Post(models.Model):
     title = models.CharField(max_length=50,verbose_name='标题')  #blank=True  可以为空字段
     desc = models.CharField(max_length=255, blank=True, verbose_name='摘要')
     category = models.ForeignKey(Category, verbose_name='分类')
-    tag = models.ManyToManyField(Tag,verbose_name='标签',related_name='tags')
+    tag = models.ManyToManyField(Tag,verbose_name='标签',related_name='posts')
     content = models.TextField(verbose_name='内容', help_text="注:目前仅支持Markdown格式")
     is_markdown = models.BooleanField(default=True, verbose_name='支持Markdown格式')
     html = models.TextField(default='', verbose_name='渲染后的内容')
@@ -59,7 +59,6 @@ class Post(models.Model):
     owner = models.ForeignKey(User,verbose_name='作者')
     created_time = models.DateTimeField(auto_now_add=True,verbose_name='发布时间')##增加文章则自动添加时间
     update_time = models.DateTimeField(auto_now=True, verbose_name='更新时间')  # 修改自动添加时间
-
 
 
     def status_show(self):
