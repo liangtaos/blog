@@ -11,12 +11,18 @@ from .adminforms import PostAdminForm
 
 
 class PostAdmin(BaseOwnerAdmin):
-    # form = PostAdminForm    # 通过adminform处理
-    list_display = ['title', 'category', 'owner','status_show', 'created_time', 'operator', 'de', 'status']   # 展示
+    form = PostAdminForm    # 通过adminform处理
+    list_display = ['preview','title', 'category', 'owner','status_show', 'created_time', 'operator', 'de', 'status']   # 展示
     search_fields = ['title', 'category__name', 'owner__username']   # 搜索
     exclude = ['owner', 'html', 'pv', 'uv']
     list_filter = ['status']
 
+    def preview(self, obj):
+        return format_html(
+            '<a href="/post/%s.html">预览</a>'%(obj.id),
+        )
+
+    preview.short_description = '查看'
     def operator(self,obj):
         return format_html(
             '<a href="{}">编辑</a>',

@@ -20,6 +20,10 @@ from blog.views import IndexView, CategoryView, TagView, PostView,AuthorView, Li
 from comment.views import CommentView
 from testidea import adminx
 
+from ckeditor_uploader import urls as uploader_urls
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     url(r'^$',IndexView.as_view(), name='index'),
     url(r'^xadmin/', xadmin.site.urls),
@@ -29,4 +33,5 @@ urlpatterns = [
     url(r'^author/(?P<author_id>\d+)/',AuthorView.as_view(), name='author'),
     url(r'^links/$',LinkView.as_view(), name='author'),
     url(r'^comment/$', CommentView.as_view(), name='comment'),
-]
+
+] + uploader_urls.urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
