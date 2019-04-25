@@ -59,6 +59,7 @@ class CommonMixin(object):
         nav = TopNav.objects.filter(status=1)
         url_ = self.request.path
         onlinenum = self.getOnlineum()
+        # import pdb; pdb.set_trace()
         extra_context = {
             'onlinenum': onlinenum,
             'url': url_,

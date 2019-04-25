@@ -4,11 +4,10 @@
 # @Author : cold
 # @File : api.py
 
-
-from django.contrib.auth.models import User
-from rest_framework import routers, serializers, viewsets
+from rest_framework import  serializers, viewsets
 from .models import Post, Category, Tag
 from django.contrib.auth.models import User
+
 
 # User
 class UserSerializer(serializers.ModelSerializer):
@@ -22,12 +21,6 @@ class UserSerializer(serializers.ModelSerializer):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-
-
-
-
-
 
 
 # Category
@@ -70,9 +63,23 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
                   )
 
 
+class PostDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Post
+        fields = (
+            'url',
+            'id', 'title', 'created_time', 'html', 'content'
+        )
+
+
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = PostDetailSerializer
+        return super(PostViewSet, self).retrieve(request, *args, **kwargs)
 
 
 # Tag
@@ -83,11 +90,13 @@ class TagSerializer(serializers.ModelSerializer):
             'id', 'name', 'created_time',
         )
 
+
 class TagDetailSerializer(serializers.ModelSerializer):
     posts = PostSerializer(
         many=True,
         read_only=True,
     )
+
     class Meta:
         model = Tag
         fields = (
