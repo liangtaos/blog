@@ -15,10 +15,7 @@ from django.db.models import F, Q
 from django.core.cache import cache
 
 
-
 class CommonMixin(object):
-
-
 
     def get_real_ip(self):
         if self.request.META.get('HTTP_X_FORWARDED_FOR'):
@@ -42,7 +39,6 @@ class CommonMixin(object):
         cache.set('online_ips', online_ips, 5 * 60)
         return len(online_ips)
 
-
     def get_context_data(self, **kwargs):
         cates = Category.objects.all()
         showCate = []
@@ -60,7 +56,9 @@ class CommonMixin(object):
         url_ = self.request.path
         onlinenum = self.getOnlineum()
         # import pdb; pdb.set_trace()
+        tags= Tag.objects.all()
         extra_context = {
+            'tags': tags,
             'onlinenum': onlinenum,
             'url': url_,
             'navs': nav,
@@ -76,13 +74,9 @@ class CommonMixin(object):
 
 class BasePostView(CommonMixin, ListView,):
     model = Post
-    template_name = 'blog/list.html'
+    template_name = 'blog/index.html'
     context_object_name = 'posts'
     paginate_by = 10
-
-
-
-
 
 
 class IndexView(BasePostView):
@@ -113,6 +107,7 @@ class CategoryView(BasePostView):
         cate_id = self.kwargs.get('category_id')
         qs = qs.filter(category_id=cate_id)
         return qs
+
 
 class LinkView(BasePostView, ListView):
     model = Link
@@ -151,12 +146,12 @@ class TagView(BasePostView):
             tag = Tag.objects.get(id=tag_id)
         except Tag.DoesNotExist:
             return []
-        posts = tag.tags.all()
+        posts = tag.posts.all()
         return posts
 
 class PostView(CommonMixin,DetailView):
     model = Post
-    template_name = 'blog/detail.html'
+    template_name = 'blog/infobak.html'
     context_object_name = 'post'
 
     def get(self, request, *args, **kwargs):
