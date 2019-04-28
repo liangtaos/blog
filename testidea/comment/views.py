@@ -10,7 +10,7 @@ from .forms import CommentForm
 
 
 class CommentView(TemplateView):
-    http_method_names = ['POST']
+    # http_method_names = ['POST']
     template_name = 'comment/result.html'
 
 

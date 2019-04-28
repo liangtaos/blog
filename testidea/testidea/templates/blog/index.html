@@ -4,7 +4,11 @@
    {% if posts %}
   <div class="r_box">
     {% for post in posts %}
-    <li><i><<img src="/static/images/1.jpg"></i>
+        {% if post.img_src %}
+            <li><i><img src="/media/{{ post.img_src }}"></i>
+        {% else %}
+            <li><i><img src="/static/images/1.jpg"></i>
+        {% endif %}
       <h3><a href="{% url 'post' post.id %}">{{ post.title }}</a></h3>
       <p>{{ post.desc }}</p>
     </li>

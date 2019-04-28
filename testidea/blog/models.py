@@ -51,14 +51,27 @@ class Post(models.Model):
     category = models.ForeignKey(Category, verbose_name='分类')
     tag = models.ManyToManyField(Tag,verbose_name='标签',related_name='posts')
     content = models.TextField(verbose_name='内容', help_text="注:目前仅支持Markdown格式")
-    is_markdown = models.BooleanField(default=True, verbose_name='支持Markdown格式')
+    is_markdown = models.BooleanField(default=False, verbose_name='支持Markdown格式')
     html = models.TextField(default='', verbose_name='渲染后的内容')
     status = models.IntegerField(default=1,choices=STATUS,verbose_name='状态')
     pv = models.IntegerField(default=0, verbose_name='阅读量')
     uv = models.IntegerField(default=0, verbose_name='日用户量')
+    img_src = models.ImageField(upload_to='Isrc', blank=True, verbose_name='图片路径')
     owner = models.ForeignKey(User,verbose_name='作者')
     created_time = models.DateTimeField(auto_now_add=True,verbose_name='发布时间')##增加文章则自动添加时间
     update_time = models.DateTimeField(auto_now=True, verbose_name='更新时间')  # 修改自动添加时间
+
+
+    def prev_post(self):
+        return Post.objects.filter(id__lt=self.id).first()
+
+
+    def next_post(self):
+        return Post.objects.filter(id__gt=self.id).order_by('id').first()
+
+    def img_url(self):
+        import pdb; pdb.set_trace()
+        return
 
 
     def status_show(self):

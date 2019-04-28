@@ -76,7 +76,7 @@ class BasePostView(CommonMixin, ListView,):
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'posts'
-    paginate_by = 10
+    paginate_by = 15
 
 
 class IndexView(BasePostView):
@@ -151,7 +151,7 @@ class TagView(BasePostView):
 
 class PostView(CommonMixin,DetailView):
     model = Post
-    template_name = 'blog/infobak.html'
+    template_name = 'blog/info.html'
     context_object_name = 'post'
 
     def get(self, request, *args, **kwargs):

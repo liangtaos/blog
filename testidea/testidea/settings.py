@@ -147,15 +147,37 @@ STATICFILES_DIRS = [
 XADMIN_TITLE = '后台页面'
 XADMIN_FOOTER_TITLE = 'POWER BY COLD'
 
+# CKEDITOR_CONFIGS = {
+#     'default': {
+#         'toolbar': 'full',
+#         'height': 300,
+#         # 'width': 300,
+#         'tabSpaces': 4,
+#     },
+# }
+
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': 'full',
-        'height': 300,
-        # 'width': 300,
-        'tabSpaces': 4,
-    },
-}
+                   'toolbar': (['div', 'Source', '-', 'Save', 'NewPage', 'Preview', '-', 'Templates'],
+                               ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Print', 'SpellChecker',
+                                'Scayt'],
+                               ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat', '-',
+                                'Maximize', 'ShowBlocks', '-', "CodeSnippet", 'Subscript', 'Superscript'],
+                               ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
+                                'HiddenField'],
+                               ['Bold', 'Italic', 'Underline', 'Strike', '-'],
+                               ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote'],
+                               ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+                               ['Link', 'Unlink', 'Anchor'],
+                               ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'],
+                               ['Styles', 'Format', 'Font', 'FontSize'],
+                               ['TextColor', 'BGColor'],
 
+                               ),
+                   'extraPlugins': 'codesnippet',
+               }
+
+}
 # 精简模式
 # CKEDITOR_CONFIGS = {
 #     'default': {
